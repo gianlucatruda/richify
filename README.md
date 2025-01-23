@@ -27,7 +27,7 @@ Stream [LLM](https://github.com/simonw/llm) response (the original use case):
 llm "Write some markdown with code snippets" | ./richify.py
 ```
 
-(Note: Several [attempts](https://github.com/simonw/llm/pulls?q=is%3Apr+rich) have been made by myself and others to incorporate this [much-requested](https://github.com/simonw/llm/issues/12) functionality directly into Simon's LLM tool, but he never reviews or even acknowledges the [PRs, so we made a workaround.)
+(Note: Several [attempts](https://github.com/simonw/llm/pulls?q=is%3Apr+rich) have been made by myself and others to incorporate this [much-requested](https://github.com/simonw/llm/issues/12) functionality directly into Simon's LLM tool, but he never reviews or acknowledges the PRs, so we made a workaround.)
 
 - [https://github.com/simonw/llm/pull/571](https://github.com/simonw/llm/pull/571)
 - [https://github.com/simonw/llm/pull/278](https://github.com/simonw/llm/pull/278) 
@@ -58,23 +58,22 @@ The script automatically manages its dependencies through uv using the script he
 
 2. Clone this repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/gianlucatruda/richify.git
 cd richify
 ```
 
-3. (Optional) Convert `richify.py` to an executable script:
+3. Convert `richify.py` to an executable script:
 ```bash
-mv richify.py richify
-chmod +x richify
+chmod +x richify.py
 ```
 
-4. (Optional) Move the executable to somewhere in your `PATH`
+4. (Optional) Move the executable to somewhere in your `PATH`:
 
-e.g. on macOS 
+For example on macOS 
 
 ```bash
-mv richify /usr/local/bin/
+sudo cp richify.py /usr/local/bin/
 ```
 
-Now you can invoke it with `richify` from anywhere.
+Now you can invoke it with `richify.py` from anywhere.
 
