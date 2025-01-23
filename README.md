@@ -3,9 +3,11 @@
 A real-time Markdown rendering tool that supports streaming input. 
 Built with Rich and designed to run with uv.
 
+![Example of using richify in terminal](img/example_01.png) 
+
+Original inspiration: [LLM Issue #12](https://github.com/simonw/llm/issues/12#issuecomment-2558147310).
 For non-streaming use cases, consider using [rich-cli](https://github.com/Textualize/rich-cli/) instead.
 
-Original inspiration: [LLM Issue #12](https://github.com/simonw/llm/issues/12#issuecomment-2558147310)
 
 ## Usage
 
@@ -33,9 +35,10 @@ llm "Write some markdown with code snippets" | ./richify.py
 - [https://github.com/simonw/llm/pull/278](https://github.com/simonw/llm/pull/278) 
 - [https://github.com/simonw/llm/issues/12](https://github.com/simonw/llm/issues/12)
 
-The script uses uv's script runner mode and automatically handles dependencies. No separate installation step is needed!
 
 ## How It Works
+
+The script uses uv's script runner mode and automatically handles dependencies. No separate installation step is needed!
 
 The script automatically:
 - Detects if it's receiving piped input
@@ -77,3 +80,5 @@ sudo cp richify.py /usr/local/bin/
 
 Now you can invoke it with `richify.py` from anywhere.
 
+
+![Example of using richify in terminal](img/example_02.png) 
