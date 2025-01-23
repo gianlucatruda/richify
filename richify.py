@@ -24,14 +24,22 @@ from rich.live import Live
 from rich.markdown import Markdown
 from rich import print as rprint
 
-CODE_THEME = "ansi_dark"
+# Global configuration
+MARKDOWN_STYLE = {
+    "code_theme": "ansi_dark",
+    "justify": "left",
+}
 
 
 class MarkdownRenderer:
     def __init__(self):
-        self.console = Console()
+        self.console = Console(highlight=True)
         self.md_content = "\n"
         self.live: Optional[Live] = None
+
+    def create_markdown(self, content: str) -> Markdown:
+        """Create a Markdown object with consistent styling."""
+        return Markdown(content, **MARKDOWN_STYLE)
 
     def render_help(self) -> None:
         """Display usage instructions and examples."""
@@ -59,7 +67,7 @@ Stream the output of an LLM query with markdown formatting
 llm "Write some markdown with code snippets" | ./richify.py
 ```
 """
-        self.console.print(Markdown(help_text, code_theme=CODE_THEME))
+        self.console.print(self.create_markdown(help_text))
 
     @staticmethod
     def is_pipe_input() -> bool:
@@ -77,7 +85,7 @@ llm "Write some markdown with code snippets" | ./richify.py
         """Render markdown content from stdin in real-time."""
         try:
             with Live(
-                Markdown(""), console=self.console, refresh_per_second=10
+                self.create_markdown(""), console=self.console, refresh_per_second=10
             ) as live:
                 self.live = live
                 while True:
@@ -85,7 +93,7 @@ llm "Write some markdown with code snippets" | ./richify.py
                     if not chunk:
                         break
                     self.md_content += chunk
-                    live.update(Markdown(self.md_content, code_theme=CODE_THEME))
+                    live.update(self.create_markdown(self.md_content))
         except UnicodeDecodeError as e:
             rprint(f"[red]Error: Invalid character encoding - {str(e)}[/red]")
         except Exception as e:
