@@ -24,11 +24,13 @@ from rich.live import Live
 from rich.markdown import Markdown
 from rich import print as rprint
 
+CODE_THEME = "ansi_dark"
+
 
 class MarkdownRenderer:
     def __init__(self):
         self.console = Console()
-        self.md_content = ""
+        self.md_content = "\n"
         self.live: Optional[Live] = None
 
     def render_help(self) -> None:
@@ -57,7 +59,7 @@ Stream the output of an LLM query with markdown formatting
 llm "Write some markdown with code snippets" | ./richify.py
 ```
 """
-        self.console.print(Markdown(help_text))
+        self.console.print(Markdown(help_text, code_theme=CODE_THEME))
 
     @staticmethod
     def is_pipe_input() -> bool:
@@ -83,7 +85,7 @@ llm "Write some markdown with code snippets" | ./richify.py
                     if not chunk:
                         break
                     self.md_content += chunk
-                    live.update(Markdown(self.md_content))
+                    live.update(Markdown(self.md_content, code_theme=CODE_THEME))
         except UnicodeDecodeError as e:
             rprint(f"[red]Error: Invalid character encoding - {str(e)}[/red]")
         except Exception as e:
