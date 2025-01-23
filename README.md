@@ -3,7 +3,7 @@
 A real-time Markdown rendering tool that supports streaming input. 
 Built with Rich and designed to run with uv.
 
-![Example of using richify in terminal](img/example_01.png) 
+![GIF demo of using richify in terminal](img/demo.gif) 
 
 Original inspiration: [this comment](https://github.com/simonw/llm/issues/12#issuecomment-2558147310).
 For non-streaming use cases, consider using [rich-cli](https://github.com/Textualize/rich-cli/) instead.
@@ -80,4 +80,6 @@ sudo cp richify.py /usr/local/bin/
 Now you can invoke it with `richify.py` from anywhere.
 
 
+![Example of using richify in terminal](img/example_01.png) 
 ![Example of using richify in terminal](img/example_02.png) 
+
