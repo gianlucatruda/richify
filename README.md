@@ -18,13 +18,22 @@ Run the script directly with uv:
 echo "# Hello" | ./richify.py
 
 # Render a file
-cat document.md | ./richify.py
+cat README.md | ./richify.py
+```
 
-# Stream LLM output
+Stream [LLM](https://github.com/simonw/llm) response (the original use case):
+
+```bash
 llm "Write some markdown with code snippets" | ./richify.py
 ```
 
-3. The script uses uv's script runner mode and automatically handles dependencies. No separate installation step is needed!
+(Note: Several [attempts](https://github.com/simonw/llm/pulls?q=is%3Apr+rich) have been made by myself and others to incorporate this [much-requested](https://github.com/simonw/llm/issues/12) functionality directly into Simon's LLM tool, but he never reviews or even acknowledges the [PRs, so we made a workaround.)
+
+- [https://github.com/simonw/llm/pull/571](https://github.com/simonw/llm/pull/571)
+- [https://github.com/simonw/llm/pull/278](https://github.com/simonw/llm/pull/278) 
+- [https://github.com/simonw/llm/issues/12](https://github.com/simonw/llm/issues/12)
+
+The script uses uv's script runner mode and automatically handles dependencies. No separate installation step is needed!
 
 ## How It Works
 
@@ -41,9 +50,7 @@ Richify uses several key components to render Markdown in real-time:
 - **Signal Handling**: Gracefully handles Ctrl+C and termination signals
 - **Streaming Input**: Processes input character-by-character for smooth updates
 
-The script automatically manages its dependencies through uv using the script header:
-- Python ≥ 3.8
-- rich ≥ 13.9.4
+The script automatically manages its dependencies through uv using the script header.
 
 ## Installation
 
