@@ -16,10 +16,11 @@ Render a markdown file
 cat document.md | ./richify.py
 ```
 
-Stream the output of an LLM query with markdown formatting
+Stream the output of an [LLM](https://github.com/simonw/llm) query with markdown formatting
 ```bash
 llm "Write some markdown with code snippets" | ./richify.py
 ```
+(This was the original use case. If you don't care about streaming, you probably just want to use [rich-cli](https://github.com/Textualize/rich-cli/) instead.)
 
 Original inspiration:
 
