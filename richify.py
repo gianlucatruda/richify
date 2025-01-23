@@ -11,7 +11,6 @@ https://github.com/simonw/llm/issues/12#issuecomment-2558147310
 """
 
 import sys
-import select
 from rich.console import Console
 from rich.live import Live
 from rich.markdown import Markdown
