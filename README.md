@@ -5,7 +5,7 @@ Built with Rich and designed to run with uv.
 
 ![Example of using richify in terminal](img/example_01.png) 
 
-Original inspiration: [LLM Issue #12](https://github.com/simonw/llm/issues/12#issuecomment-2558147310).
+Original inspiration: [this comment](https://github.com/simonw/llm/issues/12#issuecomment-2558147310).
 For non-streaming use cases, consider using [rich-cli](https://github.com/Textualize/rich-cli/) instead.
 
 
@@ -31,10 +31,9 @@ llm "Write some markdown with code snippets" | ./richify.py
 
 (Note: Several [attempts](https://github.com/simonw/llm/pulls?q=is%3Apr+rich) have been made by myself and others to incorporate this [much-requested](https://github.com/simonw/llm/issues/12) functionality directly into Simon's LLM tool, but he never reviews or acknowledges the PRs, so we made a workaround.)
 
-- [https://github.com/simonw/llm/pull/571](https://github.com/simonw/llm/pull/571)
-- [https://github.com/simonw/llm/pull/278](https://github.com/simonw/llm/pull/278) 
-- [https://github.com/simonw/llm/issues/12](https://github.com/simonw/llm/issues/12)
-
+- [Rich markdown formatting (including streaming) in any mode with --rich by gianlucatruda · Pull Request #571 ](https://github.com/simonw/llm/pull/571)
+- [rich printing by juftin · Pull Request #278](https://github.com/simonw/llm/pull/278)
+- [Markdown renderer support · Issue #12](https://github.com/simonw/llm/issues/12)
 
 ## How It Works
 
