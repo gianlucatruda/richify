@@ -1,4 +1,4 @@
-# Richify: Markdown Live Renderer
+# Richify.py: Markdown Live Renderer
 
 A real-time Markdown rendering tool that supports streaming input. 
 Built with Rich and designed to run with uv.
