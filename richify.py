@@ -24,6 +24,7 @@ from rich.live import Live
 from rich.markdown import Markdown, Heading
 from rich import print as rprint
 from rich.style import Style
+from rich.text import Text
 
 # Global configuration
 MARKDOWN_KWARGS = {
@@ -45,6 +46,19 @@ class CustomHeading(Heading):
         self, console: Console, options: ConsoleOptions
     ) -> RenderResult:
         self.text.style = Style(**HEADING_STYLE)
+        HMAP = {
+            "h1": "#",
+            "h2": "##",
+            "h3": "###",
+            "h4": "####",
+            "h5": "#####",
+            "h6": "######",
+        }
+        if self.tag in HMAP:
+            self.text = Text(
+                HMAP[self.tag] + " ",
+                self.text.style,
+            ).append(self.text)
         yield self.text
 
 
