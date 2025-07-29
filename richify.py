@@ -19,16 +19,47 @@ https://github.com/simonw/llm/issues/12#issuecomment-2558147310
 import sys
 import signal
 from typing import Optional
-from rich.console import Console
+from rich.console import Console, ConsoleOptions, RenderResult
 from rich.live import Live
-from rich.markdown import Markdown
+from rich.markdown import Markdown, Heading
 from rich import print as rprint
+from rich.style import Style
+from rich.text import Text
 
 # Global configuration
 MARKDOWN_STYLE = {
     "code_theme": "ansi_dark",
     "justify": "left",
 }
+
+
+class FancyHeading(Heading):
+    """A heading class that uses colors instead of centering for headings"""
+
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+
+    def __rich_console__(
+        self, console: Console, options: ConsoleOptions
+    ) -> RenderResult:
+        text = self.text
+        if self.tag == 1:
+            # Create new Text object with just the content
+            styled_text = Text(
+                str(self.text),
+                style=Style(color="light_goldenrod1", bgcolor="slate_blue3"),
+            )
+            yield Text("")
+            yield styled_text
+        else:
+            # apply default text styles, see default_styles.py in rich
+            text.justify = "left"
+            text.style = Style(color="blue")
+            yield Text("")
+            yield text
+
+
+Markdown.elements["heading"] = FancyHeading
 
 
 class MarkdownRenderer:
@@ -39,7 +70,11 @@ class MarkdownRenderer:
 
     def create_markdown(self, content: str) -> Markdown:
         """Create a Markdown object with consistent styling."""
-        return Markdown(content, **MARKDOWN_STYLE)
+        _md = Markdown(content, **MARKDOWN_STYLE)
+        _md.elements["heading"] = FancyHeading
+        _md.elements["heading_open"] = FancyHeading
+        # print(_md.elements)
+        return _md
 
     def render_help(self) -> None:
         """Display usage instructions and examples."""
