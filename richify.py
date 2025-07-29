@@ -89,7 +89,7 @@ llm "Write some markdown with code snippets" | ./richify.py
             ) as live:
                 self.live = live
                 while True:
-                    chunk = sys.stdin.read(1)
+                    chunk = sys.stdin.read(20)
                     if not chunk:
                         break
                     self.md_content += chunk
