@@ -19,16 +19,47 @@ https://github.com/simonw/llm/issues/12#issuecomment-2558147310
 import sys
 import signal
 from typing import Optional
-from rich.console import Console
+from rich.console import Console, ConsoleOptions, RenderResult
 from rich.live import Live
-from rich.markdown import Markdown
+from rich.markdown import Markdown, Heading
 from rich import print as rprint
+from rich.style import Style
+from rich.text import Text
 
 # Global configuration
-MARKDOWN_STYLE = {
+MARKDOWN_KWARGS = {
     "code_theme": "ansi_dark",
     "justify": "left",
 }
+
+HEADING_STYLE = {
+    "color": "blue",
+}
+
+
+class CustomHeading(Heading):
+    """Custom headings to replace the gross centred defaults.
+    Inspired by a tip from github.com/llimllib
+    """
+
+    def __rich_console__(
+        self, console: Console, options: ConsoleOptions
+    ) -> RenderResult:
+        self.text.style = Style(**HEADING_STYLE)
+        HMAP = {
+            "h1": "#",
+            "h2": "##",
+            "h3": "###",
+            "h4": "####",
+            "h5": "#####",
+            "h6": "######",
+        }
+        if self.tag in HMAP:
+            self.text = Text(
+                HMAP[self.tag] + " ",
+                self.text.style,
+            ).append(self.text)
+        yield self.text
 
 
 class MarkdownRenderer:
@@ -39,7 +70,9 @@ class MarkdownRenderer:
 
     def create_markdown(self, content: str) -> Markdown:
         """Create a Markdown object with consistent styling."""
-        return Markdown(content, **MARKDOWN_STYLE)
+        _md = Markdown(content, **MARKDOWN_KWARGS)
+        _md.elements["heading_open"] = CustomHeading
+        return _md
 
     def render_help(self) -> None:
         """Display usage instructions and examples."""
@@ -89,7 +122,7 @@ llm "Write some markdown with code snippets" | ./richify.py
             ) as live:
                 self.live = live
                 while True:
-                    chunk = sys.stdin.read(1)
+                    chunk = sys.stdin.read(20)
                     if not chunk:
                         break
                     self.md_content += chunk
