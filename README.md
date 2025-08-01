@@ -60,7 +60,7 @@ The script automatically manages its dependencies through uv using the script he
 
 2. Clone this repository:
 ```bash
-git clone https://github.com/gianlucatruda/richify.git
+git clone --depth 1 https://github.com/gianlucatruda/richify.git
 cd richify
 ```
 
