@@ -26,55 +26,7 @@ from rich import print as rprint
 from rich.style import Style
 from rich.text import Text
 
-# Global configuration
-MARKDOWN_KWARGS = {
-    "code_theme": "ansi_dark",
-    "justify": "left",
-}
-
-HEADING_STYLE = {
-    "color": "blue",
-}
-
-
-class CustomHeading(Heading):
-    """Custom headings to replace the gross centred defaults.
-    Inspired by a tip from github.com/llimllib
-    """
-
-    def __rich_console__(self, console: Console, options: ConsoleOptions) -> RenderResult:
-        self.text.style = Style(**HEADING_STYLE)
-        HMAP = {
-            "h1": "#",
-            "h2": "##",
-            "h3": "###",
-            "h4": "####",
-            "h5": "#####",
-            "h6": "######",
-        }
-        if self.tag in HMAP:
-            self.text = Text(
-                HMAP[self.tag] + " ",
-                self.text.style,
-            ).append(self.text)
-        yield self.text
-
-
-class MarkdownRenderer:
-    def __init__(self):
-        self.console = Console(highlight=True)
-        self.md_content = "\n"
-        self.live: Optional[Live] = None
-
-    def create_markdown(self, content: str) -> Markdown:
-        """Create a Markdown object with consistent styling."""
-        _md = Markdown(content, **MARKDOWN_KWARGS)
-        _md.elements["heading_open"] = CustomHeading
-        return _md
-
-    def render_help(self) -> None:
-        """Display usage instructions and examples."""
-        help_text = """
+HELP_TEXT = """
 ## Richify: Markdown Live Renderer
 
 Real-time Markdown rendering tool that formats text as you type or pipe it in.
@@ -98,7 +50,56 @@ Stream the output of an LLM query with markdown formatting
 llm "Write some markdown with code snippets" | ./richify.py
 ```
 """
-        self.console.print(self.create_markdown(help_text))
+
+# Global configuration
+MARKDOWN_KWARGS = {
+    "code_theme": "ansi_dark",
+    "justify": "left",
+}
+
+HEADING_STYLE = {
+    "color": "blue",
+}
+
+
+class CustomHeading(Heading):
+    """Custom headings to replace the gross centred defaults.
+    Inspired by a tip from github.com/llimllib
+    """
+
+    def __rich_console__(
+        self, console: Console, options: ConsoleOptions
+    ) -> RenderResult:
+        self.text.style = Style(**HEADING_STYLE)
+        HMAP = {
+            "h1": "#",
+            "h2": "##",
+            "h3": "###",
+            "h4": "####",
+            "h5": "#####",
+            "h6": "######",
+        }
+        if self.tag in HMAP:
+            self.text = Text(
+                HMAP[self.tag] + " ",
+                self.text.style,
+            ).append(self.text)
+        yield self.text
+
+
+class MarkdownRenderer:
+    """Updated renderer with (janky, hacky) scrolling support inspired by Aider."""
+
+    def __init__(self):
+        self.console = Console(highlight=True)
+        self.md_content = "\n"
+        self.live = None
+
+    def create_markdown(self, content: str) -> Markdown:
+        """Create a Markdown object with consistent styling."""
+        _md = Markdown(content, **MARKDOWN_KWARGS)
+        _md.elements["heading_open"] = CustomHeading
+        return _md
 
     @staticmethod
     def is_pipe_input() -> bool:
@@ -114,14 +115,15 @@ llm "Write some markdown with code snippets" | ./richify.py
 
     def render_stream(self) -> None:
         """Render markdown content from stdin in real-time."""
+
         try:
             with Live(
                 self.create_markdown(""),
                 console=self.console,
                 auto_refresh=True,
                 refresh_per_second=10,
-                vertical_overflow="visible",  # ellipsis, crop, visible
-                screen=False,  # Alternative screen
+                vertical_overflow="ellipsis",  # ellipsis, crop, visible
+                screen=True,  # Alternative screen
                 transient=False,  # (has no effect when screen=True)
             ) as live:
                 self.live = live
@@ -130,12 +132,24 @@ llm "Write some markdown with code snippets" | ./richify.py
                     if not chunk:
                         break
                     self.md_content += chunk
-                    live.update(self.create_markdown(self.md_content))
-            # self.console.print(self.create_markdown(self.md_content))
+                    self.live.update(
+                        self.create_markdown(
+                            "\n".join(
+                                self.md_content.split("\n")[-self.console.height :]
+                            )
+                        )
+                    )
+            self.live.stop()
+            self.console.print(self.create_markdown(self.md_content))
+
         except UnicodeDecodeError as e:
             rprint(f"[red]Error: Invalid character encoding - {str(e)}[/red]")
         except Exception as e:
             rprint(f"[red]Unexpected error: {str(e)}[/red]")
+
+    def render_help(self) -> None:
+        """Display usage instructions and examples."""
+        self.console.print(self.create_markdown(HELP_TEXT))
 
     def run(self) -> None:
         """Main execution method."""
