@@ -2,7 +2,7 @@
 # /// script
 # requires-python = ">=3.8"
 # dependencies = [
-#     "rich>=13.9.4",
+#     "rich>=14.1.0",
 # ]
 # ///
 
@@ -118,8 +118,11 @@ llm "Write some markdown with code snippets" | ./richify.py
             with Live(
                 self.create_markdown(""),
                 console=self.console,
+                auto_refresh=True,
                 refresh_per_second=10,
-                vertical_overflow="ellipsis",  # ellipsis, crop, visible
+                vertical_overflow="visible",  # ellipsis, crop, visible
+                screen=False,  # Alternative screen
+                transient=False,  # (has no effect when screen=True)
             ) as live:
                 self.live = live
                 while True:
@@ -128,6 +131,7 @@ llm "Write some markdown with code snippets" | ./richify.py
                         break
                     self.md_content += chunk
                     live.update(self.create_markdown(self.md_content))
+            # self.console.print(self.create_markdown(self.md_content))
         except UnicodeDecodeError as e:
             rprint(f"[red]Error: Invalid character encoding - {str(e)}[/red]")
         except Exception as e:
