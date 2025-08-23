@@ -42,9 +42,7 @@ class CustomHeading(Heading):
     Inspired by a tip from github.com/llimllib
     """
 
-    def __rich_console__(
-        self, console: Console, options: ConsoleOptions
-    ) -> RenderResult:
+    def __rich_console__(self, console: Console, options: ConsoleOptions) -> RenderResult:
         self.text.style = Style(**HEADING_STYLE)
         HMAP = {
             "h1": "#",
@@ -118,7 +116,10 @@ llm "Write some markdown with code snippets" | ./richify.py
         """Render markdown content from stdin in real-time."""
         try:
             with Live(
-                self.create_markdown(""), console=self.console, refresh_per_second=10
+                self.create_markdown(""),
+                console=self.console,
+                refresh_per_second=10,
+                vertical_overflow="ellipsis",  # ellipsis, crop, visible
             ) as live:
                 self.live = live
                 while True:
